@@ -1,10 +1,31 @@
-<p align="center">
-  <img src="resource/logo.png" alt="Project TaH Logo" width="150"/>
-</p>
+<div align="center">
 
-# Think-at-Hard: Selective Latent Iterations to Improve Reasoning Language Models
+  <img src="resource/logo.png" alt="Project TaH Logo" width="100"/>
 
-Feel free to star the repo if you find it interesting. The paper is coming soon.
+  
+
+  <h1>Think-at-Hard</h1>
+
+  <h3>Selective Latent Iterations to Improve Reasoning Language Models</h3>
+
+  <p>
+    <a href="https://arxiv.org/abs/2511.08577">📑 <b>Paper</b></a> •
+    <a href="https://huggingface.co/collections/nics-efc/tah">🤗 <b>HuggingFace</b></a>
+  </p>
+
+</div>
+Think-at-Hard (TaH) improves LLM reasoning by running extra latent iterations only on hard tokens instead of all tokens. A lightweight decider and duo-causal attention enable targeted refinement while keeping full parallelism. TaH outperforms fixed two-iteration baselines by 8–11% while skipping 94% of second iterations, and also beats strong single-iteration Qwen3 models by 4–5%.
+
+Feel free to star the repo or cite the paper if you find it interesting.
+
+```bibtex
+@article{fu2025tah,
+    title={Think-at-Hard: Selective Latent Iterations to Improve Reasoning Language Models}, 
+    author={Tianyu Fu and Yichen You and Zekai Chen and Guohao Dai and Huazhong Yang and Yu Wang},
+    journal={arXiv preprint arXiv:2510.08577},
+    year={2025},
+}
+```
 
 ## Environment Setup
 Create a new environment:

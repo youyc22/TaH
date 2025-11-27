@@ -9,7 +9,7 @@ import torch
 import torch.nn.functional as F
 import json
 import os
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields
 from typing import Optional, Union, Tuple, Dict, Any, List, Union
 from transformers import PreTrainedModel, AutoModelForCausalLM
 from transformers.modeling_outputs import CausalLMOutputWithPast
@@ -455,9 +455,6 @@ class TaHForCausalLM(PreTrainedModel):
             sdpa_attention_mask = self.create_TaH_sdpa_attention_mask(
                 active_position_ids, active_valid_mask, cache, iter_depth, dtype=dtype
             )
-
-            # Process this iteration with sparse inputs
-            current_model = self._select_model_for_iteration(iter_depth)
                 
             active_outputs = self._process_sparse_iteration(
                 sparse_input=active_input_embeds,
@@ -470,7 +467,7 @@ class TaHForCausalLM(PreTrainedModel):
                 use_cache=True if iter_depth < max_iterations - 1 else use_cache,
                 output_attentions=output_attentions,
                 output_hidden_states=True, # noqa: output_hidden_states must be True to get last hidden for iter decider
-                model=current_model, # Pass the selected model to _process_sparse_iteration
+                model=self.simple_base_model, # Pass the selected model to _process_sparse_iteration
                 **kwargs,
             )
 
@@ -1190,6 +1187,11 @@ class TaHForCausalLM(PreTrainedModel):
             
             # Convert serialized type objects back to actual types
             config_dict = dict_string_to_type(config_dict)
+            
+            # Filter out keys that are not valid TaHConfig fields
+            valid_fields = {f.name for f in fields(TaHConfig)}
+            config_dict = {k: v for k, v in config_dict.items() if k in valid_fields}
+            
             saved_config = TaHConfig(**config_dict)
             logger.info(f"Loaded TaH config from {config_path}")
 
